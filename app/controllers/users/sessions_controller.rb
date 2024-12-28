@@ -1,6 +1,14 @@
 class Users::SessionsController < Devise::SessionsController
   include RackSessionFix
 
+  def new
+    if current_user
+      render json: { message: "Authenticated", authentication_token: request.headers["X-USER-TOKEN"] }
+    else
+      render json: { message: "Please authenticate with POST /users/sign_in" }
+    end
+  end
+
   def create
     user = warden.authenticate!(auth_options)
     token = Tiddle.create_and_return_token(user, request, expires_in: 1.week)

@@ -53,9 +53,11 @@ class CompaniesImportService
       company.addresses << address
     else
       note_invalid_company_row(index, address.errors.full_messages.join(", "), address.errors)
+      false
     end
   rescue ActiveRecord::RecordInvalid => e
     note_invalid_company_row(index, e.message, address.errors)
+    false
   end
 
   def find_or_build_address(company, address_attributes)

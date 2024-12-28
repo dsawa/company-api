@@ -32,7 +32,12 @@ In VSCode containered terminal run: `rails server`
 
 Setup PostgreSQL database on Your machine. Example with docker: `docker run --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 postgres`
 
-Run `rails server` and go to http://localhost:3000.
+Then freely run
+```
+rails db:create db:migrate
+```
+
+Run `rails server` and try app (see API Authentication section).
 
 ### Debugger
 
@@ -53,9 +58,18 @@ Base API user is prepared in seeds file so run:
 rails db:seed
 ```
 
-When app is running you can go to http://localhost:3000 or http://localhost:3000/users/sign_in and provide credentials from seed:
-* email: company@api.com
-* password: 123456
+Obtain authentication token with:
+```
+curl --request POST \
+  --url http://localhost:3000/users/sign_in \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"user": {
+		"email": "company@api.com",
+		"password": "123456"
+	}
+}'
+```
 
 After that you will receive authentication token
 ```
@@ -114,7 +128,8 @@ curl --request POST \
 curl --request GET \
   --url http://localhost:3000/api/v1/companies \
   --header 'X-USER-EMAIL: company@api.com' \
-  --header 'X-USER-TOKEN: YOUR_TOKEN'
+  --header 'X-USER-TOKEN: YOUR_TOKEN' \
+  --header 'Content-Type: application/json'
 ```
 
 * Show details of single company
@@ -122,5 +137,6 @@ curl --request GET \
 curl --request GET \
   --url http://localhost:3000/api/v1/companies/2 \
   --header 'X-USER-EMAIL: company@api.com' \
-  --header 'X-USER-TOKEN: YOUR_TOKEN'
+  --header 'X-USER-TOKEN: YOUR_TOKEN' \
+  --header 'Content-Type: application/json'
 ```
