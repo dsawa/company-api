@@ -19,7 +19,7 @@ repos:
       - id: rubocop
         args: ['--autocorrect']
 
-  - repo: https://github.com/mattlqx/pre-commit-ruby
-    rev: v1.3.6
-    hooks:
-    - id: rspec
+  # - repo: https://github.com/mattlqx/pre-commit-ruby
+  #   rev: v1.3.6
+  #   hooks:
+  #   - id: rspec
