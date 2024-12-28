@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Company, type: :model do
   describe 'associations' do
     it { should have_many(:addresses).dependent(:destroy) }
+    it { should accept_nested_attributes_for(:addresses) }
   end
 
   describe 'validations' do

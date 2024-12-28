@@ -47,10 +47,10 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
   gem "rubocop", "~> 1.69"
+  gem "rspec-rails", "~> 7.1"
 end
 
 group :test do
-  gem "rspec-rails", "~> 7.1"
   gem "factory_bot_rails", "~> 6.4"
   gem "faker", "~> 3.5"
   gem "shoulda-matchers", "~> 5.3"
