@@ -1,4 +1,7 @@
 class Api::V1::CompaniesController < ApplicationController
+  include RackSessionFix
+
+  before_action :authenticate_user!
   before_action :validate_file_param, only: :import
 
   def index
