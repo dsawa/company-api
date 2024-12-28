@@ -4,8 +4,9 @@ RSpec.describe Api::V1::CompaniesController, type: :controller do
   render_views
 
   context 'when user is authenticated' do
+    let(:user) { create(:user) }
+
     before do
-      user = User.create!(email: 'test@companyapi.com', password: '12345678')
       sign_in user
     end
 
