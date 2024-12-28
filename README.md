@@ -7,6 +7,7 @@ Tech stack:
 * [Rails 8](https://rubyonrails.org)
 * [PostgreSQL 16](https://www.postgresql.org)
 * [Docker](https://www.docker.com)
+* [Pre-commit](https://pre-commit.com)
 * [VSCode](https://code.visualstudio.com)
 
 ## Development Setup
@@ -27,7 +28,7 @@ Connect to DB with:
 
 In VSCode containered terminal run: `rails server`
 
-### Traditional 
+### Traditional
 
 Setup PostgreSQL database on Your machine. Example with docker: `docker run --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432  postgres`
 
@@ -36,3 +37,9 @@ Run `rails server` and go to localhost:3000.
 ### Debugger
 
 Running app with `bundle exec rdbg -O -n -c -- bin/rails server -p 3000` will give You possibility to connect to VSCode debugger. Debug configurations are placed under `.vscode/launch.json`
+
+### Pre-commit
+
+Project uses pre-commit hooks. Install `pre-commit` (MacOS: brew install pre-commit) and then in project run `pre-commit install`.
+
+To run hook manually: `pre-commit run --all-files`
