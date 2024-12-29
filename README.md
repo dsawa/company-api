@@ -37,7 +37,7 @@ Then freely run
 rails db:create db:migrate
 ```
 
-Run `rails server` and try app (see API Authentication section).
+Run `rails server` and check if app is running with `open http://localhost:3000`. For next steps see API Authentication Section.
 
 ### Debugger
 
