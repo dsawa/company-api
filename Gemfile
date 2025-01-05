@@ -48,7 +48,7 @@ group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
-  gem "brakeman", "~> 7", require: false
+  gem "brakeman", "~> 7.0", require: false
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
@@ -59,5 +59,5 @@ end
 group :test do
   gem "factory_bot_rails", "~> 6.4"
   gem "faker", "~> 3.5"
-  gem "shoulda-matchers", "~> 5.3"
+  gem "shoulda-matchers", "~> 6.4.0"
 end
