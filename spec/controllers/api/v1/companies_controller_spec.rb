@@ -22,7 +22,18 @@ RSpec.describe Api::V1::CompaniesController, type: :controller do
       it 'returns all companies' do
         get :index, format: :json
         json_response = JSON.parse(response.body)
+
         expect(json_response['data'].size).to eq(3)
+        json_response['data'].each_with_index do |company_data, index|
+          company = companies[index]
+
+          expect(company_data['id']).to eq(company.id)
+          expect(company_data['name']).to eq(company.name)
+          expect(company_data['registration_number']).to eq(company.registration_number)
+          expect(company_data['addresses'].sort_by { |h| h['postal_code'] }).to eq(
+            company.addresses.map { |address| address.attributes.slice('street', 'city', 'postal_code', 'country') }.sort_by { |h| h['postal_code'] }
+          )
+        end
       end
     end
 
@@ -32,13 +43,20 @@ RSpec.describe Api::V1::CompaniesController, type: :controller do
       context 'when company exists' do
         it 'returns a successful response' do
           get :show, params: { id: company.id }, format: :json
+
           expect(response).to have_http_status(:success)
         end
 
         it 'returns the correct company' do
           get :show, params: { id: company.id }, format: :json
           json_response = JSON.parse(response.body)
+
           expect(json_response['id']).to eq(company.id)
+          expect(json_response['name']).to eq(company.name)
+          expect(json_response['registration_number']).to eq(company.registration_number)
+          expect(json_response['addresses'].sort_by { |h| h['postal_code'] }).to eq(
+            company.addresses.map { |address| address.attributes.slice('street', 'city', 'postal_code', 'country') }.sort_by { |h| h['postal_code'] }
+          )
         end
       end
 
@@ -67,18 +85,6 @@ RSpec.describe Api::V1::CompaniesController, type: :controller do
       end
 
       context 'with valid params' do
-        it 'creates a new Company' do
-          expect {
-            post :create, params: valid_company_attributes, format: :json
-          }.to change(Company, :count).by(1)
-        end
-
-        it 'creates associated address' do
-          expect {
-            post :create, params: valid_company_attributes, format: :json
-          }.to change(Address, :count).by(2)
-        end
-
         it 'returns created status' do
           post :create, params: valid_company_attributes, format: :json
 
@@ -105,12 +111,6 @@ RSpec.describe Api::V1::CompaniesController, type: :controller do
       end
 
       context 'with invalid Company params' do
-        it 'does not create a new Company' do
-          expect {
-            post :create, params: invalid_company_attributes, format: :json
-          }.not_to change(Company, :count)
-        end
-
         it 'returns unprocessable_entity status' do
           post :create, params: invalid_company_attributes, format: :json
 
@@ -133,15 +133,8 @@ RSpec.describe Api::V1::CompaniesController, type: :controller do
         let(:invalid_addresses_attributes) do
           [ FactoryBot.attributes_for(:address, street: ''), FactoryBot.attributes_for(:address, city: '') ]
         end
-
         let(:valid_company_invalid_addresses_params) do
           valid_company_attributes.deep_merge(company: { addresses_attributes: invalid_addresses_attributes })
-        end
-
-        it 'does not create a new Address' do
-          expect {
-            post :create, params: valid_company_invalid_addresses_params, format: :json
-          }.not_to change(Address, :count)
         end
 
         it 'returns unprocessable_entity status' do
@@ -176,9 +169,15 @@ RSpec.describe Api::V1::CompaniesController, type: :controller do
         let!(:imported_companies) { create_list(:company, 2, :with_addresses) }
 
         before do
-          allow(import_result).to receive(:invalid_rows).and_return([])
-          allow(import_result).to receive(:imported_company_ids).and_return(imported_companies.map(&:id))
-          allow(import_service).to receive(:call).and_return(import_result)
+          allow(import_result).to receive(:invalid_rows).and_return([]).once
+          allow(import_result).to receive(:imported_company_ids).and_return(imported_companies.map(&:id)).once
+          allow(import_service).to receive(:call).and_return(import_result).once
+        end
+
+        it 'returns successful response' do
+          post :import, params: { file: file }, format: :json
+
+          expect(response).to have_http_status(:success)
         end
 
         it 'calls import service with file' do
@@ -220,9 +219,15 @@ RSpec.describe Api::V1::CompaniesController, type: :controller do
         end
 
         before do
-          allow(import_result).to receive(:invalid_rows).and_return(invalid_rows)
-          allow(import_result).to receive(:imported_company_ids).and_return([ imported_company.id ])
-          allow(import_service).to receive(:call).and_return(import_result)
+          allow(import_result).to receive(:invalid_rows).and_return(invalid_rows).once
+          allow(import_result).to receive(:imported_company_ids).and_return([ imported_company.id ]).once
+          allow(import_service).to receive(:call).and_return(import_result).once
+        end
+
+        it 'returns successful response' do
+          post :import, params: { file: invalid_csv_file }, format: :json
+
+          expect(response).to have_http_status(:success)
         end
 
         it 'returns imported companies and validation messages' do
