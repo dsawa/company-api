@@ -3,12 +3,13 @@
 Example of some Rails 8 features. API Application for managing companies and it's addresses.
 
 Tech stack:
-* [Ruby 3.3](https://www.ruby-lang.org/)
-* [Rails 8](https://rubyonrails.org)
-* [PostgreSQL 16](https://www.postgresql.org)
-* [Docker](https://www.docker.com)
-* [Pre-commit](https://pre-commit.com)
-* [VSCode](https://code.visualstudio.com)
+
+- [Ruby 3.3](https://www.ruby-lang.org/)
+- [Rails 8](https://rubyonrails.org)
+- [PostgreSQL 16](https://www.postgresql.org)
+- [Docker](https://www.docker.com)
+- [Pre-commit](https://pre-commit.com)
+- [VSCode](https://code.visualstudio.com)
 
 ## Development Setup
 
@@ -22,9 +23,10 @@ VSCode should detect devcontainer config for easy development.
 If using database GUI for managing DB (like: [Database Client JDBC for VSCode](https://marketplace.visualstudio.com/items?itemName=cweijan.dbclient-jdbc)): Run `docker ps` and find Your container postgresql name. That name will be host, for example: `company_api-postgres-1`.
 
 Connect to DB with:
-* host: company_api-postgres-1
-* user: postgres
-* password: postgres
+
+- host: company_api-postgres-1
+- user: postgres
+- password: postgres
 
 In VSCode containered terminal run: `rails server`
 
@@ -33,6 +35,7 @@ In VSCode containered terminal run: `rails server`
 Setup PostgreSQL database on Your machine. Example with docker: `docker run --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 postgres`
 
 Then freely run
+
 ```
 rails db:create db:migrate
 ```
@@ -54,11 +57,13 @@ To run hook manually: `pre-commit run --all-files`
 App uses simple token authentication with use of popular [devise](https://github.com/heartcombo/devise) and [tiddle](https://github.com/adamniedzielski/tiddle) gems.
 
 Base API user is prepared in seeds file so run:
+
 ```
 rails db:seed
 ```
 
 Obtain authentication token with:
+
 ```
 curl --request POST \
   --url http://localhost:3000/users/sign_in \
@@ -72,6 +77,7 @@ curl --request POST \
 ```
 
 After that you will receive authentication token
+
 ```
 {
   "message": "Authenticated",
@@ -80,12 +86,14 @@ After that you will receive authentication token
 ```
 
 Send additional headers to every next request:
-* X-USER-EMAIL: company@api.com
-* X-USER-TOKEN: YOUR_TOKEN
+
+- X-USER-EMAIL: company@api.com
+- X-USER-TOKEN: YOUR_TOKEN
 
 ## Example requests:
 
-* Create company with addresses:
+- Create company with addresses:
+
 ```
 curl --request POST \
   --url http://localhost:3000/api/v1/companies \
@@ -114,7 +122,8 @@ curl --request POST \
 }'
 ```
 
-* Import companies with addresses from file:
+- Import companies with addresses from file:
+
 ```
 curl --request POST \
  --header 'X-USER-EMAIL: company@api.com' \
@@ -123,7 +132,8 @@ curl --request POST \
  --url http://localhost:3000/api/v1/companies/import
 ```
 
-* List companies and addresses:
+- List companies and addresses:
+
 ```
 curl --request GET \
   --url http://localhost:3000/api/v1/companies \
@@ -132,7 +142,8 @@ curl --request GET \
   --header 'Content-Type: application/json'
 ```
 
-* Show details of single company
+- Show details of single company
+
 ```
 curl --request GET \
   --url http://localhost:3000/api/v1/companies/2 \
